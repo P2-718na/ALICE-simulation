@@ -1,0 +1,12 @@
+ADD_EXECUTABLE(lab main.cpp)
+
+ADD_SUBDIRECTORY(ParticleType)
+ADD_SUBDIRECTORY(ResonanceType)
+ADD_SUBDIRECTORY(Particle)
+
+TARGET_LINK_LIBRARIES(lab ParticleType ResonanceType Particle)
+
+SET_TARGET_PROPERTIES(
+        lab PROPERTIES
+        RUNTIME_OUTPUT_DIRECTORY "${PROJECT_BINARY_DIR}"
+)
