@@ -87,7 +87,6 @@ bool Particle::AddParticleType(const char* Name, double Mass, int Charge, double
     return true;
   }
 
-  // todo ask if this is correct (the if width == 0)
   ParticleTypes_[NParticleTypes_++] = new ResonanceType(Name, Mass, Charge, Width);
   return true;
 }
