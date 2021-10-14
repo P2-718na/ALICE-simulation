@@ -1,12 +1,14 @@
 #include "ParticleType.hpp"
 #include "ResonanceType.hpp"
+#include "Particle.hpp"
 
 int main() {
-  sim::ParticleType* Particles[2];
+  sim::Particle::AddParticleType("pion", 134.9, 0);
+  sim::Particle::AddParticleType("positron", 0.5109, 1);
 
-  Particles[0] = new sim::ParticleType{"Nome", 1, 1};
-  Particles[1] = new sim::ResonanceType{"Nome2", 2, -1, 0.5};
+  sim::Particle::PrintParticleTypes();
 
-  Particles[0]->Print();
-  Particles[1]->Print();
+  sim::Particle particle("pion", 0, 0, 0);
+
+  particle.SetIndex("positron");
 }

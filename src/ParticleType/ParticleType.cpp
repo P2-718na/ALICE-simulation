@@ -32,4 +32,4 @@ int ParticleType::GetCharge() const {
   return Charge_;
 }
 
-}
+} // namespace sim

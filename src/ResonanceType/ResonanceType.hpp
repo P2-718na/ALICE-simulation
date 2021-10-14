@@ -22,6 +22,6 @@ class ResonanceType : public ParticleType {
   const double Width_;
 };
 
-}
+} // namespace sim
 
 #endif // define RESONANCETYPE_HPP
