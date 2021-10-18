@@ -4,7 +4,7 @@ ADD_SUBDIRECTORY(ParticleType)
 ADD_SUBDIRECTORY(ResonanceType)
 ADD_SUBDIRECTORY(Particle)
 
-TARGET_LINK_LIBRARIES(lab ParticleType ResonanceType Particle)
+TARGET_LINK_LIBRARIES(lab ParticleType ResonanceType Particle ROOT::Gui ROOT::Hist)
 
 SET_TARGET_PROPERTIES(
         lab PROPERTIES
