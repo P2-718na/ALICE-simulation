@@ -10,6 +10,7 @@ I'm writing this code for my Physics Lab-2 exam at University of Bologna.
 --------------------------------------------------------------------------------
 
 ## Dependencies
+- [ROOT](https://root.cern/) (required, version 6.18^)
 - [Doctest](https://github.com/onqtam/doctest) (bundled)
 - [CMake](https://cmake.org/) (recommended)
 
@@ -27,6 +28,12 @@ make tests    # compile tests only
 make          # compile both
 ```
 Both executables will be generated inside the build folder.
+
+### NOTE: Building ROOT application with CMake
+I run into some trouble while trying to compile ROOT with CMake.
+I think the solution is just to use the latest version of ROOT (at least
+version 6.18, I tested it on 6.24). If you encounter any other problem,
+good luck.
 
 ## Running
 This code was tested and running on _Mac OS X 10.14.6 Mojave_.
