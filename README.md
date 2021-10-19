@@ -32,7 +32,7 @@ Both executables will be generated inside the build folder.
 ### NOTE: Building ROOT application with CMake
 I run into some trouble while trying to compile ROOT with CMake.
 I think the solution is just to use the latest version of ROOT (at least
-version 6.18, I tested it on 6.24). If you encounter any other problem,
+version 6.18, I tested it out on 6.24). If you encounter any other problem,
 good luck.
 
 ## Running
@@ -41,6 +41,14 @@ Please note that this is still WIP, I will update this section later.
 
 ### Running via terminal
 TBD
+
+### Running on WSL
+This can actually be done quite easily. There is a catch, though: ROOT uses
+dynamic libraries, and they are loaded into `$LD_LIBRARY_PATH` when you
+`source thisroot.sh`. This means that, if you are launching the program from
+outside WSL (e.g. CLion), your program _will not_ find the required libraries.
+If you want to run the program, you can either setup the required environment
+variables manually, or just launch it from a terminal shell.
 
 ### Testing
 Make sure to compile tests (see [Building](#building)), then run
