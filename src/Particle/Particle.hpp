@@ -3,6 +3,12 @@
 
 namespace sim {
 
+enum DecayResult {
+  DecaySuccessful,
+  MassIsZero,
+  MassTooLow,
+};
+
 class ParticleType;
 
 class Particle {
@@ -40,6 +46,11 @@ class Particle {
   // the array is full.
   static bool AddParticleType(const char* Name, double Mass, int Charge, double Width = 0);
 
+  // Decay one particle into two other particles.
+  // Decayment will fail if either mass of this particle is
+  // zero or if it's too low.
+  DecayResult Decay2body(Particle& dau1, Particle& dau2) const;
+
   // Getters ///////////////////////////////////////////////////////////////////
   int GetIndex() const;
   double GetPx() const;
@@ -76,6 +87,10 @@ class Particle {
   // Find a particle type in ParticleTypes_ array by name, return its index.
   // Returns -1 if not found.
   static int FindParticle(const char* Name);
+
+  // Used by Decay2Body to split momentum components
+  // todo comment variable names
+  void Boost(double bx, double by, double bz);
 };
 
 } // namespace sim
