@@ -12,10 +12,10 @@ class ResonanceType : public ParticleType {
 
   // Methods ///////////////////////////////////////////////////////////////////
   // Print resonance info. Calls ParticleType::Print
-  void Print() const;
+  void Print() const override;
 
   // Getters ///////////////////////////////////////////////////////////////////
-  double GetWidth() const;
+  double GetWidth() const override;
 
  private:
   // Width of resonance

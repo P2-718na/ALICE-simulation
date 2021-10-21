@@ -31,5 +31,8 @@ double ParticleType::GetMass() const {
 int ParticleType::GetCharge() const {
   return Charge_;
 }
+double ParticleType::GetWidth() const {
+  return 0;
+}
 
 } // namespace sim

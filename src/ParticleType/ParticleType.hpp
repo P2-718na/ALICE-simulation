@@ -17,6 +17,9 @@ class ParticleType {
   double GetMass() const;
   int GetCharge() const;
 
+  // This is needed for inheritance. Returns zero.
+  virtual double GetWidth() const;
+
  private:
   // Name of the particle
   const char* Name_;
