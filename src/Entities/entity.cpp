@@ -27,4 +27,34 @@ bool Entity::is(EntityType type) const {
 void Entity::printAttributes() const {
   std::cout << "Type: " << type() << ", Mass: " << mass() << ", Charge: " << charge();
 }
+
+double Entity::energy() const {
+  return sqrt(mass() * mass() + p2());
+}
+
+void Entity::boost(double betaX, double betaY, double betaZ) {
+  // todo i have no idea what this does
+  double energy = this->energy();
+
+  // Boost this Lorentz vector
+  double b2     = (betaX * betaX) + (betaY * betaY) + (betaZ * betaZ);
+  double gamma  = 1.0 / sqrt(1.0 - b2);
+  double bp     = betaX * px() + betaY * py() + betaZ * px();
+  double gamma2 = b2 > 0 ? (gamma - 1.0) / b2 : 0.0;
+
+  // todo this should be changed
+  px_ += gamma2 * bp * betaX + gamma * betaX * energy;
+  py_ += gamma2 * bp * betaY + gamma * betaY * energy;
+  pz_ += gamma2 * bp * betaZ + gamma * betaZ * energy;
+}
+
+double Entity::invariantMass(Entity& entity1, Entity& entity2) {
+  const double energySumSquare   = std::pow(entity1.energy() + entity2.energy(), 2);
+  const double momentumSumSquare = std::pow(entity1.px() + entity2.px(), 2)
+                                   + std::pow(entity1.py() + entity2.py(), 2)
+                                   + std::pow(entity1.pz() + entity2.pz(), 2);
+
+  return std::sqrt(energySumSquare - momentumSumSquare);
+}
+
 }  // namespace sim

@@ -1,13 +1,13 @@
 #ifndef ENTITY_VARIANTS_HPP
 #define ENTITY_VARIANTS_HPP
 
-#include "Resonances/KaonS.hpp"
+#include "resonances/KaonS.hpp"
 
-#include "Particles/PionP.hpp"
-#include "Particles/PionM.hpp"
-#include "Particles/KaonP.hpp"
-#include "Particles/KaonM.hpp"
-#include "Particles/ProtonP.hpp"
-#include "Particles/ProtonM.hpp"
+#include "particles/PionP.hpp"
+#include "particles/PionM.hpp"
+#include "particles/KaonP.hpp"
+#include "particles/KaonM.hpp"
+#include "particles/ProtonP.hpp"
+#include "particles/ProtonM.hpp"
 
 #endif // define ENTITY_VARIANTS_HPP

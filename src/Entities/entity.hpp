@@ -59,6 +59,39 @@ class Entity {
   inline double p() const {
     return std::sqrt(p2());
   }
+
+  // Set individual momentum components
+  inline double px(double px) {
+    return px_ = px;
+  };
+  inline double py(double py) {
+    return py_ = py;
+  }
+  inline double pz(double pz) {
+    return pz_ = pz;
+  }
+
+  // Set all momentum components
+  inline void p(double px, double py, double pz) {
+    this->px(px);
+    this->py(py);
+    this->pz(pz);
+  }
+
+  // Get total energy of the particle
+  double energy() const;
+
+  // Boost particle using lorentz vector transform.
+  void boost(double betaX, double betaY, double betaZ);
+
+  // Get invariant mass of two particles
+  static double invariantMass(Entity& entity1, Entity& entity2);
+
+  inline virtual int decayTwoEntities(Entity& entity1, Entity& entity2) const {
+    // Same considerations as width()
+    assert(false);
+    return -1;
+  }
 };
 
 }  // namespace sim
