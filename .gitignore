@@ -13,3 +13,6 @@ CMakeFiles
 # MacOS and windows files
 .DS_Store
 *.db
+
+#Jupyter junk
+.ipynb_checkpoints
