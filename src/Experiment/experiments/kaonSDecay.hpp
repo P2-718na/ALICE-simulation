@@ -52,7 +52,7 @@ class KaonSDecay : public Experiment {
       entities.push_back(std::make_unique<KaonS>());
     }();
 
-    return entities.end();
+    return entities.end() - 1;
   }
 
   // Generate decay particles and boost them. This function guarantees that the decay particles are generated right
@@ -79,14 +79,15 @@ class KaonSDecay : public Experiment {
 
   inline void handleEvent(int particleCount) {
     // Allocate space for new entities
-    EntityList entities(particleCount * 1.2);
+    EntityList entities;
+    entities.reserve(particleCount * 1.2);
 
     while (particleCount --> 0) {
       // Get iterator to randomly generated entity
       auto entity = generateRandomEntity(entities);
 
       // If entity is not K*, we don't have to worry about decay...
-      if (!(*entity)->is(kaonS)) {
+      if (!(entity->get())->is(kaonS)) {
         continue;
       }
 

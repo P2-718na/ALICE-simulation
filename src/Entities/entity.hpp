@@ -87,11 +87,23 @@ class Entity {
   // Get invariant mass of two particles
   static double invariantMass(Entity& entity1, Entity& entity2);
 
-  inline virtual int decayTwoEntities(Entity& entity1, Entity& entity2) const {
+  inline virtual int decayTwoEntities(Entity& entity1, Entity& entity2) {
     // Same considerations as width()
     assert(false);
     return -1;
   }
+
+  // Destructor ////////////////////////////////////////////////////////////////////////////////////////////////////////
+  // We need a virtual destructor since we will be explicitly deleting derived pointers
+  inline virtual ~Entity() = default;
+
+  // And we need to obey to the 3/5/0 rule. These are deleted, since I am not using them.
+  Entity(const Entity& copyFrom) = delete;
+  Entity& operator=(const Entity& copyFrom) = delete;
+  Entity(Entity &&) = delete;
+  Entity& operator=(Entity &&) = delete;
+
+
 };
 
 }  // namespace sim
