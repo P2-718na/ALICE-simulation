@@ -1,41 +1,22 @@
-#include "ParticleType.hpp"
-#include "ResonanceType.hpp"
-#include "Particle.hpp"
+#include <lyra/lyra.hpp>
+#include <cmath>
 
-#include <TApplication.h>
-#include <TCanvas.h>
-#include <TRootCanvas.h>
-#include <TH1F.h>
+#include "experiments/kaonSDecay.hpp"
 
 int main(int argc, char** argv) {
-  sim::Particle::AddParticleType("pion", 134.9, 0);
-  sim::Particle::AddParticleType("positron", 0.5109, 1);
+  // Order of magnitude of number of generated events;
+  int events = 4;
+  auto cli = lyra::cli()
+             | lyra::opt( events, "events" )
+             ["-e"]
+               ("Order of magnitude of generated events.");
 
-  sim::Particle::PrintParticleTypes();
+  // Create a new Kaon* decay experiment
+  sim::Experiment* experiment = new sim::KaonSDecay();
 
-  sim::Particle particle("pion", 0, 0, 0);
+  // Run the experiments. 100 particles for each event.
+  experiment->run(std::pow(10, events), 100);
 
-  particle.SetIndex("positron");
-
-  // TApplication is required for the application to work correctly.
-  TApplication app("app", &argc, argv);
-
-  // This is needed to terminate program when canvas is closed.
-  // I am not sure whether i want this or not, but I spent a good half an
-  // hour trying to make this code work and i'm gonna keep it for now.
-  // Please note that These require linking ROOT::Gui.
-  // (TCanvas worked with ROOT::Gpad as well, but TRootCanvas does not).
-  auto canvas = new TCanvas();
-  auto rc = (TRootCanvas *)canvas->GetCanvasImp();
-  rc->Connect("CloseWindow()", "TApplication", gApplication, "Terminate()");
-
-  TH1F* table = new TH1F("name", "title", 2, 2, 2);
-  table->Fill(3);
-  table->Fill(3);
-
-
-  table->Draw();
-
-  // Start ROOT event loop.
-  app.Run();
+  // Write event data to root file
+  experiment->save("histograms.root");
 }

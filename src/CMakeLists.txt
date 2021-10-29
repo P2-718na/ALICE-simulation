@@ -1,10 +1,9 @@
 ADD_EXECUTABLE(lab main.cpp)
 
-ADD_SUBDIRECTORY(ParticleType)
-ADD_SUBDIRECTORY(ResonanceType)
-ADD_SUBDIRECTORY(Particle)
+ADD_SUBDIRECTORY(Entities)
+ADD_SUBDIRECTORY(Experiment)
 
-TARGET_LINK_LIBRARIES(lab Particle ParticleType ResonanceType ROOT::Gui ROOT::Hist)
+TARGET_LINK_LIBRARIES(lab Experiment ROOT::Gui)
 
 SET_TARGET_PROPERTIES(
         lab PROPERTIES
