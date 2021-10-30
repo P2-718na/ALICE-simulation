@@ -8,13 +8,13 @@ namespace sim {
 
 enum EntityType
 {
-  kaonP,
-  kaonM,
-  pionP,
-  pionM,
-  protonP,
-  protonM,
-  kaonS
+  pionP   = 0,
+  pionM   = 1,
+  kaonP   = 2,
+  kaonM   = 3,
+  protonP = 4,
+  protonM = 5,
+  kaonS   = 6
 };
 
 class Entity {
@@ -29,10 +29,10 @@ class Entity {
 
   // Particle type information (static) ////////////////////////////////////////////////////////////////////////////////
   // Derived classes must make these values static constexpr.
-  virtual EntityType type() const   = 0;
-  virtual double     mass() const   = 0;
+  virtual EntityType type()   const = 0;
+  virtual double     mass()   const = 0;
   virtual int        charge() const = 0;
-  virtual double     width() const;
+  virtual double     width()  const;
 
   // Check if this entity is of "type"
   bool is(EntityType type) const;
@@ -98,12 +98,10 @@ class Entity {
   inline virtual ~Entity() = default;
 
   // And we need to obey to the 3/5/0 rule. These are deleted, since I am not using them.
-  Entity(const Entity& copyFrom) = delete;
+  Entity(const Entity& copyFrom)            = delete;
+  Entity(Entity&&)                          = delete;
+  Entity& operator=(Entity&&)               = delete;
   Entity& operator=(const Entity& copyFrom) = delete;
-  Entity(Entity &&) = delete;
-  Entity& operator=(Entity &&) = delete;
-
-
 };
 
 }  // namespace sim
