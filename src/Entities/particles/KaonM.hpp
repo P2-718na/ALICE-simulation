@@ -11,8 +11,6 @@ class KaonM : public Entity {
   static constexpr int        charge_{ -1 };
 
  public:
-  inline explicit KaonM(bool isDecayProduct = false) : Entity(isDecayProduct) {}
-
   inline EntityType type() const override {
     return type_;
   }

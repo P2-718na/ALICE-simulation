@@ -6,23 +6,10 @@
 int main(int argc, char** argv) {
   // Order of magnitude of number of generated events;
   int events = 4;
-  std::string savefile{ "histograms.root" };
-
   auto cli = lyra::cli()
-           | lyra::opt( events, "1-5" )
-             ["-e"]("Order of magnitude of generated events.")
-             .choices([](int value) -> bool { return 1 <= value && value <= 5; })
-           | lyra::opt( savefile, "savefile" )
-           ["-s"]("Save file.");
-
-  // Parse cli arguments
-  auto result = cli.parse({ argc, argv });
-
-  // And terminate if there is an error:
-  if (!result) {
-    std::cerr << result.errorMessage() << std::endl;
-    exit(1);
-  }
+             | lyra::opt( events, "events" )
+             ["-e"]
+               ("Order of magnitude of generated events.");
 
   // Create a new Kaon* decay experiment
   sim::Experiment* experiment = new sim::KaonSDecay();
@@ -31,5 +18,5 @@ int main(int argc, char** argv) {
   experiment->run(std::pow(10, events), 100);
 
   // Write event data to root file
-  experiment->save(savefile);
+  experiment->save("histograms.root");
 }
