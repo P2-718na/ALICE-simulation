@@ -11,8 +11,6 @@ class PionP : public Entity {
   static constexpr int        charge_{ +1 };
 
  public:
-  inline explicit PionP(bool isDecayProduct = false) : Entity(isDecayProduct) {}
-
   inline EntityType type() const override {
     return type_;
   }
