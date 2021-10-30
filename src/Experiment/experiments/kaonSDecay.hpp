@@ -37,6 +37,8 @@ class KaonSDecay : public Experiment {
   };
 
   // Root handlers /////////////////////////////////////////////////////////////////////////////////////////////////////
+  // Histogram handlers. Stored as pointers, since it's recommended. I think this is mandatory, since
+  // we will use the Write() function.
   TH1Ptr   hists_[12];
 
   // Helper methods ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -51,11 +53,12 @@ class KaonSDecay : public Experiment {
       for (auto entity2 = entity + 1; entity2 != entities.end(); ++entity2) {
         Entity* entity2Ptr = entity2->get();
 
-        // We don't want to consider K* in invariant mass. Only decay products are considere.
+        // We don't want to consider K* in invariant mass. Only decay products are considered.
         if (entityPtr->is(kaonS)) {
           break;
         }
 
+        // Compute now invariant mass, since we will need it a lot later.
         const double invMass = Entity::invariantMass(*entityPtr, *entity2Ptr);
 
         // Plot inv mass of all particles
@@ -78,18 +81,19 @@ class KaonSDecay : public Experiment {
         // Plot inv mass of same-charged P-K couples
         if ((entityPtr->is(pionP) && entity2Ptr->is(kaonP))
             || (entityPtr->is(pionM) && entity2Ptr->is(kaonM))) {
-          hists_[InvMassPKOppCharge]->Fill(invMass);
+          hists_[InvMassPKSameCharge]->Fill(invMass);
         }
       }
 
-      //todo
-      // Every particle _except decay products_ needs to appear in these histograms.
-      hists_[ParticleDist]->Fill(entityPtr->type());
-      hists_[AzimuthAngleDist]->Fill(entityPtr->phi());
-      hists_[PolarAngleDist]->Fill(entityPtr->theta());
-      hists_[MomentumDist]->Fill(entityPtr->p());
-      hists_[TraverseMomentumDist]->Fill(entityPtr->traverseP());
-      hists_[EnergyDist]->Fill(entityPtr->energy());
+      if (!entityPtr->isDecayProduct()) {
+        // Every particle _except decay products_ needs to appear in these histograms.
+        hists_[ParticleDist]->Fill(entityPtr->type());
+        hists_[AzimuthAngleDist]->Fill(entityPtr->phi());
+        hists_[PolarAngleDist]->Fill(entityPtr->theta());
+        hists_[MomentumDist]->Fill(entityPtr->p());
+        hists_[TraverseMomentumDist]->Fill(entityPtr->traverseP());
+        hists_[EnergyDist]->Fill(entityPtr->energy());
+      }
 
       // Plot inv mass of decay-generated P-K couples
       if (entityPtr->is(kaonS)) {
@@ -100,7 +104,7 @@ class KaonSDecay : public Experiment {
   }
 
   // Generate a random entity in the first available place of entities array, and return an iterator to it.
-  inline EntityIterator generateRandomEntity(EntityList& entities) {
+  static inline EntityIterator generateRandomEntity(EntityList& entities) {
     // Generate polar components for current particle
     const double p     = gRandom->Exp(1);
     const double phi   = gRandom->Uniform(0, 2 * M_PI);
@@ -109,11 +113,12 @@ class KaonSDecay : public Experiment {
     // This was made in order to avoid else blocks. I don't really like this syntax, I might change this
     // with a goto or simply add back the else-if.
     [&]() {
-      const double chance = gRandom->Uniform(0, 100);
+      // Note that we must start from 1, not 0!
+      const double chance = gRandom->Uniform(1, 100);
 
-      // Note that this generation appears to favout (-) variants.
-      // It shouldn't really matter if I add = to the comparison (and, in fact, it does not).
-      // The effect is negligible for lots of samples. ((fixme might be decay effect fix)
+      // Note that root Uniform generation appears to be slightly more likely to return lower numbers (based purely
+      // on my empirical observations). Anyways, even if this were true, it would probably be negligible for large
+      // numbers.
       if (chance < 40) {
         entities.push_back(std::make_unique<PionP>());
         return;
@@ -158,11 +163,11 @@ class KaonSDecay : public Experiment {
     // Then we chose one of two possible outcomes
     // gRandom->Uniform generates doubles in range (a, b)
     if (gRandom->Uniform(0, 2) <= 1) {
-      (*(entity + 1)) = std::make_unique<PionM>();
-      (*(entity + 2)) = std::make_unique<KaonP>();
+      (*(entity + 1)) = std::make_unique<PionM>(true);
+      (*(entity + 2)) = std::make_unique<KaonP>(true);
     } else {
-      (*(entity + 1)) = std::make_unique<PionP>();
-      (*(entity + 2)) = std::make_unique<KaonM>();
+      (*(entity + 1)) = std::make_unique<PionP>(true);
+      (*(entity + 2)) = std::make_unique<KaonM>(true);
     }
 
     // The code here:           vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv is just a reference to the entity
@@ -206,7 +211,7 @@ class KaonSDecay : public Experiment {
     hists_[InvMassSameCharge]    = std::make_unique<TH1F>("InvMassSameCharge", "Invariant mass with same charge", 1E3, 0, 12);
     hists_[InvMassPKOppCharge]   = std::make_unique<TH1F>("InvMassPKOppCharge", "InvMassPKOppCharge", 1E3, 0, 12);
     hists_[InvMassPKSameCharge]  = std::make_unique<TH1F>("InvMassPKSameCharge", "InvMassPKSameCharge", 1E3, 0, 12);
-    hists_[InvMassPKCouple]      = std::make_unique<TH1F>("InvMassPKCouple", "InvMassPKCouple", 1E3, 0, 2);
+    hists_[InvMassPKCouple]      = std::make_unique<TH1F>("InvMassPKCouple", "InvMassPKCouple", 100, 0.2, 1.6);
 
     hists_[ParticleDist]->GetXaxis()->SetBinLabel(1 + pionP, "pion+");
     hists_[ParticleDist]->GetXaxis()->SetBinLabel(1 + pionM, "pion-");
@@ -225,6 +230,7 @@ class KaonSDecay : public Experiment {
 
   inline void save(std::string fileName) override {
     // Open root file for writing. Clear and recreate file if already present.
+    // ((use mutex to lock possible multi thread jank with root TFile?? very overkill for the scope of this project))
     TFile file(fileName.c_str(), "recreate");
 
     // Write every histogram to file.

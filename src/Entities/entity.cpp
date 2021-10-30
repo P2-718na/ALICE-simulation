@@ -6,6 +6,7 @@ namespace sim {
 
 // Constructor /////////////////////////////////////////////////////////////////////////////////////////////////////////
 Entity::Entity() = default;
+Entity::Entity(bool isDecayProduct) :isDecayProduct_{isDecayProduct} {}
 Entity::Entity(double px, double py, double pz)
   : px_{ px }
   , py_{ py }
