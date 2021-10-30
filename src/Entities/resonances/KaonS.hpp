@@ -27,7 +27,7 @@ class KaonS : public Entity {
 
   // Make this resonance decay into two entities. The entities need to be already generated with momentum = 0.
   // This function will set their momentum appropriately.
-  inline int decayTwoEntities(Entity& entity1, Entity& entity2) override {
+  inline int decayTo(Entity& entity1, Entity& entity2) override {
     if(mass() == 0.) {
       std::cout << "Decayment cannot be preformed if mass is zero" << std::endl;
       return 1;

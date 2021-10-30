@@ -186,7 +186,7 @@ class KaonSDecay : public Experiment {
 
     // The code here:           vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv is just a reference to the entity
     // pointed.
-    (*entity)->decayTwoEntities(*((entity + 1)->get()), *((entity + 2)->get()));
+    (*entity)->decayTo(*((entity + 1)->get()), *((entity + 2)->get()));
   }
 
   inline void handleEvent(int particleCount) {

@@ -124,7 +124,7 @@ class Entity {
   // Get invariant mass of two particles
   static double invariantMass(Entity& entity1, Entity& entity2);
 
-  inline virtual int decayTwoEntities(Entity& entity1, Entity& entity2) {
+  inline virtual int decayTo(Entity& entity1, Entity& entity2) {
     // Same considerations as width()
     assert(false);
     return -1;
