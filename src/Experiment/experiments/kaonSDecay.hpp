@@ -108,8 +108,6 @@ class KaonSDecay : public Experiment {
 
   // Generate a random entity in the first available place of entities array, and return an iterator to it.
   static inline EntityPtrIterator generateRandomEntity(EntityList& entities) {
-    // Fixme theta breaks the last graph. If it's equal to pi/2 eveything is ok, otherwise it breaks badly.
-    //  If I fix values with mean, it works.
     // Generate polar components for current particle
     const double p     = gRandom->Exp(1.);
     const double phi   = gRandom->Uniform(0., 2. * M_PI);
