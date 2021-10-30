@@ -60,6 +60,25 @@ class Entity {
     return std::sqrt(p2());
   }
 
+  // Get polar momentum coordinates
+  // Polar angle
+  inline double theta() const {
+    return std::acos(pz() / p());
+  }
+  // Azimuth angle
+  inline double phi() const {
+    const double angle = std::atan(py() / px());
+    const double x = px();
+    const double y = py();
+
+    // This certainly works. I Maybe it can be rewritten in a better way(?)
+    return (x > 0 && y > 0) ? angle
+         : (x < 0 && y > 0) ? M_PI + angle
+         : (x < 0 && y < 0) ? M_PI + angle
+         : (x > 0 && y < 0) ? M_PI * 2 + angle
+         : 0;
+  }
+
   // Set individual momentum components
   inline double px(double px) {
     return px_ = px;
@@ -77,9 +96,16 @@ class Entity {
     this->py(py);
     this->pz(pz);
   }
+  inline void pPolar(double p, double phi, double theta) {
+    px(p * std::sin(theta) * std::cos(phi));
+    py(p * std::sin(theta) * std::sin(phi));
+    pz(p * std::cos(theta));
+  }
 
   // Get total energy of the particle
   double energy() const;
+
+  double traverseP() const;
 
   // Boost particle using lorentz vector transform.
   void boost(double betaX, double betaY, double betaZ);

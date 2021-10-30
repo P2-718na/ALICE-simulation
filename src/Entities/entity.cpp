@@ -32,8 +32,12 @@ double Entity::energy() const {
   return sqrt(mass() * mass() + p2());
 }
 
+double Entity::traverseP() const {
+  return std::sqrt((px() * px()) + (py() * py()));
+}
+
 void Entity::boost(double betaX, double betaY, double betaZ) {
-  // todo i have no idea what this does
+  // fixme i have no idea what this does
   double energy = this->energy();
 
   // Boost this Lorentz vector
@@ -42,7 +46,7 @@ void Entity::boost(double betaX, double betaY, double betaZ) {
   double bp     = betaX * px() + betaY * py() + betaZ * px();
   double gamma2 = b2 > 0 ? (gamma - 1.0) / b2 : 0.0;
 
-  // todo this should be changed
+  // fixme this should be changed
   px_ += gamma2 * bp * betaX + gamma * betaX * energy;
   py_ += gamma2 * bp * betaY + gamma * betaY * energy;
   pz_ += gamma2 * bp * betaZ + gamma * betaZ * energy;

@@ -68,7 +68,7 @@ class KaonSDecay : public Experiment {
           hists_[InvMassSameCharge]->Fill(invMass);
         }
 
-        // todo check if these two ifs can be simplified
+        // fixme check if these two ifs can be simplified
         // Plot inv mass of opposite-charged P-K couples
         if ((entityPtr->is(pionP) && entity2Ptr->is(kaonM))
             || (entityPtr->is(pionM) && entity2Ptr->is(kaonP))) {
@@ -85,10 +85,10 @@ class KaonSDecay : public Experiment {
       //todo
       // Every particle _except decay products_ needs to appear in these histograms.
       hists_[ParticleDist]->Fill(entityPtr->type());
-      //hists_[AzimuthAngleDist]->Fill(entityPtr->phi());
-      //hists_[PolarAngleDist]->Fill(entityPtr->theta());
+      hists_[AzimuthAngleDist]->Fill(entityPtr->phi());
+      hists_[PolarAngleDist]->Fill(entityPtr->theta());
       hists_[MomentumDist]->Fill(entityPtr->p());
-      //hists_[TraverseMomentumDist]->Fill(entityPtr->trasverseP());
+      hists_[TraverseMomentumDist]->Fill(entityPtr->traverseP());
       hists_[EnergyDist]->Fill(entityPtr->energy());
 
       // Plot inv mass of decay-generated P-K couples
@@ -101,16 +101,19 @@ class KaonSDecay : public Experiment {
 
   // Generate a random entity in the first available place of entities array, and return an iterator to it.
   inline EntityIterator generateRandomEntity(EntityList& entities) {
+    // Generate polar components for current particle
+    const double p     = gRandom->Exp(1);
+    const double phi   = gRandom->Uniform(0, 2 * M_PI);
+    const double theta = gRandom->Uniform(0, M_PI);
+
     // This was made in order to avoid else blocks. I don't really like this syntax, I might change this
     // with a goto or simply add back the else-if.
     [&]() {
       const double chance = gRandom->Uniform(0, 100);
 
-      // todo generate angle and momentum components
-
       // Note that this generation appears to favout (-) variants.
       // It shouldn't really matter if I add = to the comparison (and, in fact, it does not).
-      // The effect is negligible for lots of samples. ((todo might be decay effect fix)
+      // The effect is negligible for lots of samples. ((fixme might be decay effect fix)
       if (chance < 40) {
         entities.push_back(std::make_unique<PionP>());
         return;
@@ -138,6 +141,9 @@ class KaonSDecay : public Experiment {
       entities.push_back(std::make_unique<KaonS>());
     }();
 
+    // Set momentum components
+    (entities.end() - 1)->get()->pPolar(p, phi, theta);
+
     return entities.end() - 1;
   }
 
@@ -148,6 +154,7 @@ class KaonSDecay : public Experiment {
     entities.push_back(EntityPtr{});
     entities.push_back(EntityPtr{});
 
+    // fixme I think root Uniform is biased towards lower numbers. Try to change with gRandom->Binomial, maybe (?)
     // Then we chose one of two possible outcomes
     // gRandom->Uniform generates doubles in range (a, b)
     if (gRandom->Uniform(0, 2) <= 1) {
