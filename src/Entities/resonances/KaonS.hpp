@@ -37,6 +37,9 @@ class KaonS : public Entity {
     double massDau1 = entity1.mass();
     double massDau2 = entity2.mass();
 
+    assert(massDau1 != 0);
+    assert(massDau2 != 0);
+
     // add width effect////////////////////////////////////
 
     // gaussian random numbers

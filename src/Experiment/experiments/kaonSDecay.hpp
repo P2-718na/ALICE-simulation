@@ -10,6 +10,7 @@
 #include <TH1.h>
 #include <TFile.h>
 #include <TRandom3.h>
+#include <random>
 
 namespace sim {
 
@@ -103,43 +104,57 @@ class KaonSDecay : public Experiment {
     }
   }
 
+  static std::default_random_engine& generator_() {
+    static std::random_device rd;
+    static std::default_random_engine generator{ rd() };
+    return generator;
+  }
+
   // Generate a random entity in the first available place of entities array, and return an iterator to it.
   static inline EntityIterator generateRandomEntity(EntityList& entities) {
+    // Fixme this somehow breaks last graph. If these are 0, the graph is perfect.
+    //  If I fix values with mean, it works.
     // Generate polar components for current particle
-    const double p     = gRandom->Exp(1);
-    const double phi   = gRandom->Uniform(0, 2 * M_PI);
-    const double theta = gRandom->Uniform(0, M_PI);
+   //const double p     = 1;//gRandom->Exp(1.);
+   //const double phi   = M_PI;//gRandom->Uniform(0., 2. * M_PI);
+   //const double theta = M_PI_2;//gRandom->Uniform(0., M_PI);
+
+    // this is the same
+    const double p     = std::exponential_distribution<float>(1)(generator_());//gRandom->Exp(1.);
+    const double phi   = std::uniform_real_distribution<float>(0, 2*M_PI)(generator_());//gRandom->Uniform(0., 2. * M_PI);
+    const double theta = std::uniform_real_distribution<float>(0, M_PI)(generator_());//gRandom->Uniform(0., M_PI);
+    // idk prob check decay2bpdy, assert everything is != 0 ?
+
 
     // This was made in order to avoid else blocks. I don't really like this syntax, I might change this
     // with a goto or simply add back the else-if.
     [&]() {
-      // Note that we must start from 1, not 0!
-      const double chance = gRandom->Uniform(1, 100);
+      const double chance = gRandom->Rndm();
 
       // Note that root Uniform generation appears to be slightly more likely to return lower numbers (based purely
       // on my empirical observations). Anyways, even if this were true, it would probably be negligible for large
-      // numbers.
-      if (chance < 40) {
+      // numbers. (This is not a problem anymore, since i switched to using Rndm().
+      if (chance < .40) {
         entities.push_back(std::make_unique<PionP>());
         return;
       }
-      if (chance < 80) {
+      if (chance < .80) {
         entities.push_back(std::make_unique<PionM>());
         return;
       }
-      if (chance < 85) {
+      if (chance < .85) {
         entities.push_back(std::make_unique<KaonP>());
         return;
       }
-      if (chance < 90) {
+      if (chance < .90) {
         entities.push_back(std::make_unique<KaonM>());
         return;
       }
-      if (chance < 94.5) {
+      if (chance < .945) {
         entities.push_back(std::make_unique<ProtonP>());
         return;
       }
-      if (chance < 99) {
+      if (chance < .99) {
         entities.push_back(std::make_unique<ProtonM>());
         return;
       }
@@ -161,8 +176,7 @@ class KaonSDecay : public Experiment {
 
     // fixme I think root Uniform is biased towards lower numbers. Try to change with gRandom->Binomial, maybe (?)
     // Then we chose one of two possible outcomes
-    // gRandom->Uniform generates doubles in range (a, b)
-    if (gRandom->Uniform(0, 2) <= 1) {
+    if (gRandom->Rndm(0) < .5) {
       (*(entity + 1)) = std::make_unique<PionM>(true);
       (*(entity + 2)) = std::make_unique<KaonP>(true);
     } else {
@@ -199,6 +213,8 @@ class KaonSDecay : public Experiment {
   // Public ////////////////////////////////////////////////////////////////////////////////////////////////////////////
  public:
   inline KaonSDecay() {
+    gRandom->SetSeed();
+
     // Setup root histograms
     hists_[ParticleDist]         = std::make_unique<TH1I>("ParticleDist", "Particle types", 7, 0, 7);
     hists_[AzimuthAngleDist]     = std::make_unique<TH1F>("AzimuthAngleDist", "Azimuth angles", 100, 0, 2 * M_PI);
