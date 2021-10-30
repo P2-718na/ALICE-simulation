@@ -53,7 +53,7 @@ class KaonS : public Entity {
       w = x1 * x1 + x2 * x2;
     } while ( w >= 1.0 );
 
-    w = sqrt( (-2.0 * log( w ) ) / w );
+    w = std::sqrt( (-2.0 * std::log( w ) ) / w );
     y1 = x1 * w;
     y2 = x2 * w;
 
@@ -71,8 +71,8 @@ class KaonS : public Entity {
 
     double phi = rand()*norm;
     double theta = rand()*norm*0.5 - M_PI/2.;
-    entity1.p(pout*sin(theta)*cos(phi),pout*sin(theta)*sin(phi),pout*cos(theta));
-    entity2.p(-pout*sin(theta)*cos(phi),-pout*sin(theta)*sin(phi),-pout*cos(theta));
+    entity1.p(pout*std::sin(theta)*std::cos(phi),pout*std::sin(theta)*std::sin(phi),pout*std::cos(theta));
+    entity2.p(-pout*std::sin(theta)*std::cos(phi),-pout*std::sin(theta)*std::sin(phi),-pout*std::cos(theta));
 
     double energy = sqrt(px()*px() + py()*py() + pz()*pz() + massMot*massMot);
 

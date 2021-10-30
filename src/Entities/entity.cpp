@@ -56,8 +56,8 @@ void Entity::boost(double betaX, double betaY, double betaZ) {
 double Entity::invariantMass(Entity& entity1, Entity& entity2) {
   const double energySumSquare   = std::pow(entity1.energy() + entity2.energy(), 2);
   const double momentumSumSquare = std::pow(entity1.px() + entity2.px(), 2)
-                                   + std::pow(entity1.py() + entity2.py(), 2)
-                                   + std::pow(entity1.pz() + entity2.pz(), 2);
+                                 + std::pow(entity1.py() + entity2.py(), 2)
+                                 + std::pow(entity1.pz() + entity2.pz(), 2);
 
   return std::sqrt(energySumSquare - momentumSumSquare);
 }

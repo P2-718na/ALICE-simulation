@@ -58,6 +58,9 @@ class KaonSDecay : public Experiment {
         if (entityPtr->is(kaonS)) {
           break;
         }
+        if (entity2Ptr->is(kaonS)) {
+          continue;
+        }
 
         // Compute now invariant mass, since we will need it a lot later.
         const double invMass = Entity::invariantMass(*entityPtr, *entity2Ptr);
@@ -68,7 +71,7 @@ class KaonSDecay : public Experiment {
         // Plot inv mass of opposite/same charged particles
         if (entityPtr->charge() * entity2Ptr->charge() < 0) {
           hists_[InvMassOppCharge]->Fill(invMass);
-        } else {
+        } else {  // Note that we don't have to check if charge is zero. since kaonS particles are already skipped.
           hists_[InvMassSameCharge]->Fill(invMass);
         }
 
@@ -93,7 +96,7 @@ class KaonSDecay : public Experiment {
         hists_[PolarAngleDist]->Fill(entityPtr->theta());
         hists_[MomentumDist]->Fill(entityPtr->p());
         hists_[TraverseMomentumDist]->Fill(entityPtr->traverseP());
-        hists_[EnergyDist]->Fill(entityPtr->energy());
+        hists_[EnergyDist]->Fill(entityPtr->energy()); // Note that k* is considered here, so 4 peaks are expected.
       }
 
       // Plot inv mass of decay-generated P-K couples
@@ -104,28 +107,14 @@ class KaonSDecay : public Experiment {
     }
   }
 
-  // doesnt' change anything
-  static std::default_random_engine& generator_() {
-    static std::random_device rd;
-    static std::default_random_engine generator{ rd() };
-    return generator;
-  }
-
   // Generate a random entity in the first available place of entities array, and return an iterator to it.
   static inline EntityPtrIterator generateRandomEntity(EntityList& entities) {
-    // Fixme this somehow breaks last graph. If these are 0, the graph is perfect.
+    // Fixme theta breaks the last graph. If it's equal to pi/2 eveything is ok, otherwise it breaks badly.
     //  If I fix values with mean, it works.
     // Generate polar components for current particle
-   //const double p     = 1;//gRandom->Exp(1.);
-   //const double phi   = M_PI;//gRandom->Uniform(0., 2. * M_PI);
-   //const double theta = M_PI_2;//gRandom->Uniform(0., M_PI);
-
-    // this is the same
-    const double p     = std::exponential_distribution<float>(1)(generator_());//gRandom->Exp(1.);
-    const double phi   = std::uniform_real_distribution<float>(0, 2*M_PI)(generator_());//gRandom->Uniform(0., 2. * M_PI);
-    const double theta = std::uniform_real_distribution<float>(0, M_PI)(generator_());//gRandom->Uniform(0., M_PI);
-    // idk prob check decay2bpdy, assert everything is != 0 ?
-
+    const double p     = gRandom->Exp(1.);
+    const double phi   = gRandom->Uniform(0., 2. * M_PI);
+    const double theta = gRandom->Uniform(0., M_PI);
 
     // This was made in order to avoid else blocks. I don't really like this syntax, I might change this
     // with a goto or simply add back the else-if.
@@ -189,7 +178,7 @@ class KaonSDecay : public Experiment {
 
     // The code here:           vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv is just a reference to the entity
     // pointed.
-    (*entity)->decayTo(*((entity + 1)->get()), *((entity + 2)->get()));
+    entity->get()->decayTo(*((entity + 1)->get()), *((entity + 2)->get()));
   }
 
   inline void handleEvent(int particleCount) {
@@ -225,7 +214,7 @@ class KaonSDecay : public Experiment {
     hists_[PolarAngleDist]       = std::make_unique<TH1F>("PolarAngleDist", "Polar angles", 100, 0, M_PI);
     hists_[MomentumDist]         = std::make_unique<TH1F>("MomentumDist", "Momentum", 500, 0, 5);
     hists_[TraverseMomentumDist] = std::make_unique<TH1F>("TraverseMomentumDist", "Traverse momentum", 500, 0, 4);
-    hists_[EnergyDist]           = std::make_unique<TH1F>("EnergyDist", "Energy", 500, 0, 3);
+    hists_[EnergyDist]           = std::make_unique<TH1F>("EnergyDist", "Energy", 1000, 0, 6);
     hists_[InvMass]              = std::make_unique<TH1F>("InvMass", "Invariant mass", 500, 0, 8);
     hists_[InvMassOppCharge]     = std::make_unique<TH1F>("InvMassOppCharge", "Invariant mass with opposite charge", 500, 0, 8);
     hists_[InvMassSameCharge]    = std::make_unique<TH1F>("InvMassSameCharge", "Invariant mass with same charge", 500, 0, 8);
