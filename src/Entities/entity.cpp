@@ -30,7 +30,7 @@ void Entity::printAttributes() const {
 }
 
 double Entity::energy() const {
-  return sqrt(mass() * mass() + p2());
+  return std::sqrt(mass() * mass() + p2());
 }
 
 double Entity::traverseP() const {
@@ -44,7 +44,7 @@ void Entity::boost(double betaX, double betaY, double betaZ) {
   // Boost this Lorentz vector
   double b2     = (betaX * betaX) + (betaY * betaY) + (betaZ * betaZ);
   double gamma  = 1.0 / sqrt(1.0 - b2);
-  double bp     = betaX * px() + betaY * py() + betaZ * px();
+  double bp     = betaX * px() + betaY * py() + betaZ * pz(); // <-- This made me waste a good ~20 hours.
   double gamma2 = b2 > 0 ? (gamma - 1.0) / b2 : 0.0;
 
   // fixme this should be changed
