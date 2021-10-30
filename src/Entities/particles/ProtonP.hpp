@@ -6,7 +6,7 @@
 namespace sim {
 
 class ProtonP : public Entity {
-  static constexpr EntityType type_{ protonM };
+  static constexpr EntityType type_{ protonP };
   static constexpr double     mass_{ 0.93827 };
   static constexpr int        charge_{ +1 };
 
