@@ -15,7 +15,7 @@ If the K* particle exists, we will find some statistical discrepancies in the
 resulting data during the second phase of the prohect.
 
 ## Data analysis
-see other repo (https://github.com/P2-718na/kstar-decayment-analysis)
+see other repo (https://github.com/P2-718na/kstar-decay-analysis)
 
 --------------------------------------------------------------------------------
 

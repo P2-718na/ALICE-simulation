@@ -28,5 +28,5 @@ int main(int argc, char** argv) {
   experiment->run(std::pow(10, events), 100);
 
   // Write event data to root file
-  experiment->save("kaon-s-decay-hist.root");
+  experiment->save("kstar-decay-hist.root");
 }
