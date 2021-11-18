@@ -1,7 +1,7 @@
-ADD_EXECUTABLE(tests ./lab.test.cpp)
+ADD_EXECUTABLE(lab-tests ./lab.test.cpp)
 
 SET_TARGET_PROPERTIES(
-        tests PROPERTIES
+        lab-tests PROPERTIES
         RUNTIME_OUTPUT_DIRECTORY "${PROJECT_BINARY_DIR}"
 )
 

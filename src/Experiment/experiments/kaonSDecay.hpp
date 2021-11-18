@@ -74,7 +74,6 @@ class KaonSDecay : public Experiment {
           hists_[InvMassSameCharge]->Fill(invMass);
         }
 
-        // fixme check if these two ifs can be simplified
         // Plot inv mass of opposite-charged P-K couples
         if ((entityPtr->is(pionP) && entity2Ptr->is(kaonM))
             || (entityPtr->is(pionM) && entity2Ptr->is(kaonP))) {

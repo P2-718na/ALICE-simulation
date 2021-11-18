@@ -45,12 +45,14 @@ void Entity::boost(double betaX, double betaY, double betaZ) {
   double b2     = (betaX * betaX) + (betaY * betaY) + (betaZ * betaZ);
   double gamma  = 1.0 / sqrt(1.0 - b2);
   double bp     = betaX * px() + betaY * py() + betaZ * pz(); // <-- This made me waste a good ~20 hours.
-  double gamma2 = b2 > 0 ? (gamma - 1.0) / b2 : 0.0;
 
-  // fixme this should be changed
-  px_ += gamma2 * bp * betaX + gamma * betaX * energy;
-  py_ += gamma2 * bp * betaY + gamma * betaY * energy;
-  pz_ += gamma2 * bp * betaZ + gamma * betaZ * energy;
+  assert(gamma > 0);
+
+  double gamma2 = (gamma - 1.0) / b2;
+
+  px(px() + gamma2 * bp * betaX + gamma * betaX * energy);
+  py(py() + gamma2 * bp * betaY + gamma * betaY * energy);
+  pz(pz() + gamma2 * bp * betaZ + gamma * betaZ * energy);
 }
 
 double Entity::invariantMass(Entity& entity1, Entity& entity2) {
