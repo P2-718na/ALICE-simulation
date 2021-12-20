@@ -206,17 +206,17 @@ class KaonSDecay : public Experiment {
 
     // Setup root histograms
     hists_[ParticleDist]         = std::make_unique<TH1I>("ParticleDist", "Particle types", 7, 0, 7);
-    hists_[AzimuthAngleDist]     = std::make_unique<TH1F>("AzimuthAngleDist", "Azimuth angles", 100, 0, 2 * M_PI);
-    hists_[PolarAngleDist]       = std::make_unique<TH1F>("PolarAngleDist", "Polar angles", 100, 0, M_PI);
+    hists_[AzimuthAngleDist]     = std::make_unique<TH1F>("AzimuthAngleDist", "Azimuth angles", 360, 0, 2 * M_PI);
+    hists_[PolarAngleDist]       = std::make_unique<TH1F>("PolarAngleDist", "Polar angles", 360, 0, M_PI);
     hists_[MomentumDist]         = std::make_unique<TH1F>("MomentumDist", "Momentum", 500, 0, 5);
-    hists_[TraverseMomentumDist] = std::make_unique<TH1F>("TraverseMomentumDist", "Traverse momentum", 500, 0, 4);
-    hists_[EnergyDist]           = std::make_unique<TH1F>("EnergyDist", "Energy", 1000, 0, 6);
-    hists_[InvMass]              = std::make_unique<TH1F>("InvMass", "Invariant mass", 500, 0, 8);
-    hists_[InvMassOppCharge]     = std::make_unique<TH1F>("InvMassOppCharge", "Invariant mass with opposite charge", 500, 0, 8);
-    hists_[InvMassSameCharge]    = std::make_unique<TH1F>("InvMassSameCharge", "Invariant mass with same charge", 500, 0, 8);
-    hists_[InvMassPKOppCharge]   = std::make_unique<TH1F>("InvMassPKOppCharge", "InvMassPKOppCharge", 500, 0, 8);
-    hists_[InvMassPKSameCharge]  = std::make_unique<TH1F>("InvMassPKSameCharge", "InvMassPKSameCharge", 500, 0, 8);
-    hists_[InvMassPKCouple]      = std::make_unique<TH1F>("InvMassPKCouple", "InvMassPKCouple", 100, 0.2, 1.6);
+    hists_[TraverseMomentumDist] = std::make_unique<TH1F>("TraverseMomentumDist", "Traverse momentum", 500, 0, 4); // rebin?
+    hists_[EnergyDist]           = std::make_unique<TH1F>("EnergyDist", "Energy", 500, 0, 5); // rebin?
+    hists_[InvMass]              = std::make_unique<TH1F>("InvMass", "Invariant mass", 600, 0, 6); // rebin?
+    hists_[InvMassOppCharge]     = std::make_unique<TH1F>("InvMassOppCharge", "Invariant mass with opposite charge", 600, 0, 6);
+    hists_[InvMassSameCharge]    = std::make_unique<TH1F>("InvMassSameCharge", "Invariant mass with same charge", 600, 0, 6);
+    hists_[InvMassPKOppCharge]   = std::make_unique<TH1F>("InvMassPKOppCharge", "InvMassPKOppCharge", 600, 0, 6);
+    hists_[InvMassPKSameCharge]  = std::make_unique<TH1F>("InvMassPKSameCharge", "InvMassPKSameCharge", 600, 0, 6);
+    hists_[InvMassPKCouple]      = std::make_unique<TH1F>("InvMassPKCouple", "InvMassPKCouple", 500, 0.4, 1.4);
 
     hists_[ParticleDist]->GetXaxis()->SetBinLabel(1 + pionP, "pion+");
     hists_[ParticleDist]->GetXaxis()->SetBinLabel(1 + pionM, "pion-");
