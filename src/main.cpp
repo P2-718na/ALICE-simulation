@@ -10,7 +10,7 @@ int main(int argc, char** argv) {
   auto cli = lyra::cli()
            | lyra::opt( events, "1-5" )
              ["-e"]("Order of magnitude of generated events.")
-             .choices([](int value) -> bool { return 1 <= value && value <= 5; });
+             .choices([](int value) -> bool { return value >= 1; });
 
   // Parse cli arguments
   auto result = cli.parse({ argc, argv });
