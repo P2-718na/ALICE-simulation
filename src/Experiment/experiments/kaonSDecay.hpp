@@ -226,7 +226,13 @@ class KaonSDecay : public Experiment {
     hists_[ParticleDist]->GetXaxis()->SetBinLabel(1 + protonM, "proton-");
     hists_[ParticleDist]->GetXaxis()->SetBinLabel(1 + kaonS , "kaon*");
 
-    // Todo make histos pretty, add Sum2w
+    // Needed for correct error handling when saving and subtracting histograms
+    hists_[InvMassOppCharge]->Sumw2(true);
+    hists_[InvMassSameCharge]->Sumw2(true);
+    hists_[InvMassPKOppCharge]->Sumw2(true);
+    hists_[InvMassPKSameCharge]->Sumw2(true);
+
+    // Todo make histos pretty
   }
 
   inline void run(int eventCount, int particlesPerEvent) override {
