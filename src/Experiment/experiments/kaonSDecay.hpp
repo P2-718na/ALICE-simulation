@@ -227,10 +227,10 @@ class KaonSDecay : public Experiment {
     hists_[ParticleDist]->GetXaxis()->SetBinLabel(1 + kaonS , "kaon*");
 
     // Needed for correct error handling when saving and subtracting histograms
-    hists_[InvMassOppCharge]->Sumw2(true);
-    hists_[InvMassSameCharge]->Sumw2(true);
-    hists_[InvMassPKOppCharge]->Sumw2(true);
-    hists_[InvMassPKSameCharge]->Sumw2(true);
+    hists_[InvMassOppCharge]->Sumw2();
+    hists_[InvMassSameCharge]->Sumw2();
+    hists_[InvMassPKOppCharge]->Sumw2();
+    hists_[InvMassPKSameCharge]->Sumw2();
 
     // Todo make histos pretty
   }
