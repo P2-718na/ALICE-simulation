@@ -38,7 +38,7 @@ double Entity::traverseP() const {
 }
 
 void Entity::boost(double betaX, double betaY, double betaZ) {
-  // fixme i have no idea what this does
+  // fixme add some more comments here, unclear code.
   double energy = this->energy();
 
   // Boost this Lorentz vector
